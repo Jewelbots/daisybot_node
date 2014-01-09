@@ -1,6 +1,5 @@
 var twitter = require('ntwitter')
 	, fs = require('fs')
-	, j5 = require('johnny-five')
   , express = require('express');
 
 
