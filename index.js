@@ -100,5 +100,5 @@ app.get('/happy_score.txt', function(req, res) {
   res.send("" + tweetScore); // needs to be string for some reason?
 });
 
-app.listen(3000);
+app.listen(process.env.PORT || 8888);
 console.log('Listening on port 3000');
