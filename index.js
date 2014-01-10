@@ -77,14 +77,13 @@ console.log("made it to sentiment");
 }
 
 //ping twitter
-	twit.stream('statuses/filter', { 'follow' : '1912289796'},
+	twit.stream('statuses/filter', { 'follow' : '2236980362'},
 	  function(stream) {
 	  	stream.on('data', function (data) {
-		var tweet = data.text.replace(/[^\w\s]|_/g, "").replace(/\s+/g, " ").split(' ');
-
-
+      if(data){
+      var tweet = data.text.replace(/[^\w\s]|_/g, "").replace(/\s+/g, " ").split(' ');
 			sentiment(tweetScore, tweet);
-
+      }
 				}
 			)
 	  })
@@ -100,5 +99,7 @@ app.get('/happy_score.txt', function(req, res) {
   res.send("" + tweetScore); // needs to be string for some reason?
 });
 
+
 app.listen(process.env.PORT || 8888);
+//app.listen(3000);
 console.log('Listening on port 3000');
