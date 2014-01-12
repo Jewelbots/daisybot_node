@@ -95,6 +95,7 @@ onReady()
 
 var app = express();
 app.get('/happy_score.txt', function(req, res) {
+  
   console.log("Got request /happy_score.txt: " + tweetScore);
   res.send("" + tweetScore); // needs to be string for some reason?
 });
