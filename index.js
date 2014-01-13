@@ -51,6 +51,7 @@ console.log("made it to sentiment");
 			if(wordMap[word.toLowerCase()]) {
 				console.log("Word: " + word + " / score: " + wordMap[word.toLowerCase()]);
 				tweetScore += parseFloat(wordMap[word.toLowerCase()]);
+      
 				if(tweetScore > 0){
 //			  red.off();
 //		           blue.on();
@@ -72,7 +73,7 @@ console.log("made it to sentiment");
 
 		}
 
-
+console.log(tweetScore);
 
 }
 
