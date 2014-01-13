@@ -81,6 +81,7 @@ console.log("made it to sentiment");
 	  function(stream) {
 	  	stream.on('data', function (data) {
      if(data){
+      console.log(data);
       var tweet = data.text.replace(/[^\w\s]|_/g, "").replace(/\s+/g, " ").split(' ');
 			sentiment(tweetScore, tweet);
       }
@@ -99,7 +100,6 @@ app.get('/happy_score.txt', function(req, res) {
   console.log("Got request /happy_score.txt: " + tweetScore);
   res.send("" + tweetScore); // needs to be string for some reason?
 });
-
 
 app.listen(process.env.PORT || 8888);
 //app.listen(3000);
