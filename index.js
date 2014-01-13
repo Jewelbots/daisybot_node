@@ -44,14 +44,14 @@ var onReady = function() {
 
 
 //get sentiment
-var sentiment = function(tweetScore, tweet){
+var sentiment = function(tweet){
 console.log("made it to sentiment");
 	for(var i = 0; i < tweet.length; i++){
 			var word = tweet[i];
 			if(wordMap[word.toLowerCase()]) {
 				console.log("Word: " + word + " / score: " + wordMap[word.toLowerCase()]);
 				tweetScore += parseFloat(wordMap[word.toLowerCase()]);
-      
+        
 				if(tweetScore > 0){
 //			  red.off();
 //		           blue.on();
@@ -84,7 +84,7 @@ console.log(tweetScore);
      if(data){
       console.log(data);
       var tweet = data.text.replace(/[^\w\s]|_/g, "").replace(/\s+/g, " ").split(' ');
-			sentiment(tweetScore, tweet);
+			sentiment(tweet);
       }
 				}
 			)
@@ -96,8 +96,7 @@ onReady()
 // REST api
 
 var app = express();
-app.get('/happy_score.txt', function(req, res) {
-  
+app.get('/happy_score.txt', function(req, res) {  
   console.log("Got request /happy_score.txt: " + tweetScore);
   res.send("" + tweetScore); // needs to be string for some reason?
 });
