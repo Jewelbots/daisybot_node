@@ -80,7 +80,7 @@ console.log("made it to sentiment");
 	twit.stream('statuses/filter', { 'follow' : '2236980362'},
 	  function(stream) {
 	  	stream.on('data', function (data) {
-      if(data){
+     if(data){
       var tweet = data.text.replace(/[^\w\s]|_/g, "").replace(/\s+/g, " ").split(' ');
 			sentiment(tweetScore, tweet);
       }
