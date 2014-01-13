@@ -4,7 +4,11 @@ var twitter = require('ntwitter')
 
 
 var twit = new twitter({
-	consumer_key: 'oXAbKQyQ47h9CBVXmMGdQ',
+//	consumer_key: 'oXAbKQyQ47h9CBVXmMGdQ',
+//      consumer_secret: 'z9EqbFpf4dhNuY6M1Eawk3W2dwnt9B1PoQRAMyWtxTU',
+ //     access_token_key: '15524875-L916RzSGVMqi1DlZz4MiB7RCgsWhuKSsD9T7Pn5i1',
+ //     access_token_secret: 'GLMDBi2NFYl3eZmUZ4zmhphDMozXesMN16DI9NOaIo'
+     consumer_key: 'oXAbKQyQ47h9CBVXmMGdQ',
       consumer_secret: 'z9EqbFpf4dhNuY6M1Eawk3W2dwnt9B1PoQRAMyWtxTU',
       access_token_key: '15524875-L916RzSGVMqi1DlZz4MiB7RCgsWhuKSsD9T7Pn5i1',
       access_token_secret: 'GLMDBi2NFYl3eZmUZ4zmhphDMozXesMN16DI9NOaIo'
@@ -72,9 +76,6 @@ console.log("made it to sentiment");
 			}
 
 		}
-
-console.log(tweetScore);
-
 }
 
 //ping twitter
