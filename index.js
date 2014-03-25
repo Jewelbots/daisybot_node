@@ -1,28 +1,23 @@
 var twitter = require('ntwitter')
-	, fs = require('fs')
-  , express = require('express');
+  , fs = require('fs')
+  , express = require('express')
+  , tweetscore = 0
+  , words = fs.readFileSync('words_clean.txt').toString()
+  , wordMap = {}
+  , splitWords = words.split("\n")
+  , twit = new twitter({
+	//    consumer_key: 'oXAbKQyQ47h9CBVXmMGdQ',
+  //    consumer_secret: 'z9EqbFpf4dhNuY6M1Eawk3W2dwnt9B1PoQRAMyWtxTU',
+  //    access_token_key: '15524875-L916RzSGVMqi1DlZz4MiB7RCgsWhuKSsD9T7Pn5i1',
+  //    access_token_secret: 'GLMDBi2NFYl3eZmUZ4zmhphDMozXesMN16DI9NOaIo'
 
-
-var twit = new twitter({
-//	consumer_key: 'oXAbKQyQ47h9CBVXmMGdQ',
-//      consumer_secret: 'z9EqbFpf4dhNuY6M1Eawk3W2dwnt9B1PoQRAMyWtxTU',
- //     access_token_key: '15524875-L916RzSGVMqi1DlZz4MiB7RCgsWhuKSsD9T7Pn5i1',
- //     access_token_secret: 'GLMDBi2NFYl3eZmUZ4zmhphDMozXesMN16DI9NOaIo'
-     consumer_key: 'oXAbKQyQ47h9CBVXmMGdQ',
-      consumer_secret: 'z9EqbFpf4dhNuY6M1Eawk3W2dwnt9B1PoQRAMyWtxTU',
-      access_token_key: '15524875-L916RzSGVMqi1DlZz4MiB7RCgsWhuKSsD9T7Pn5i1',
-      access_token_secret: 'GLMDBi2NFYl3eZmUZ4zmhphDMozXesMN16DI9NOaIo'
-
+      consumer_key: 'TjrJDt1LJxo77jqltxJqw',
+      consumer_secret: 'GmWXn3NwxxwV2bEXsCm2PFEyuNlMCul1NhN62TVLU8',
+      access_token_key: '15524875-CyVr19a7cbPMriaEtTf823AxvhB5sfvSFAH3ig7ZY',
+      access_token_secret: '4IDx8I20XWbIKu1LyBVmQ7wiArim3iWcRZT36q1P738DA'
 });
 
-// Global to hold the tweet score
 
-var tweetScore = 0;
-
-var words = fs.readFileSync('words_clean.txt').toString()
-	, wordMap = {}
-	, splitWords = words.split("\n");
-	//, board = new j5.Board();
 
 //put all the words into an object
 for(var i = 0; i < splitWords.length; i++){
@@ -35,51 +30,55 @@ for(var i = 0; i < splitWords.length; i++){
 }
 
 
-//board.on("ready", function(){
-var onReady = function() {
-
-
-//setup LEDs
-//var blue = new j5.Led(9)
-//	, red = new j5.Led(10)
-//	, green = new j5.Led(11);
-
-
-
 
 //get sentiment
 var sentiment = function(tweet){
-console.log("made it to sentiment");
+   console.log("made it to sentiment");
 	for(var i = 0; i < tweet.length; i++){
-			var word = tweet[i];
+			var word = tweet[i]
+			,score = 0;
 			if(wordMap[word.toLowerCase()]) {
 				console.log("Word: " + word + " / score: " + wordMap[word.toLowerCase()]);
-				tweetScore += parseFloat(wordMap[word.toLowerCase()]);
-        
-				if(tweetScore > 0){
-//			  red.off();
-//		           blue.on();
-//		 	  green.off();
-				}
-				else if (tweetScore < -1){
-//			   red.on();
-//			   green.on();
-//			   blue.off();
-
-				}
-				else if (tweetScore < 0){
-//			  red.off();
-//		 	  blue.off();
-//			  green.on();
-				}
-
+				score += parseFloat(wordMap[word.toLowerCase()]);
 			}
-
-		}
+ 	}
+	tweetscore = translate_score(score);
 }
 
-//ping twitter
-	twit.stream('statuses/filter', { 'follow' : '2236980362'},
+var translate_score = function(score){
+
+	if(score < 0){
+	
+	  if(score > 0.5){
+	    return 5; 
+	  }
+	  else if(score > 1){
+		return 6;
+	  
+	  }
+	  else{
+	  	return 4;
+	  }
+	}
+	else{
+		if(score < 0.5){
+		  
+		  return 3; 
+		}
+		else if(score < -1){
+		  return 1;
+		}
+		else{
+			
+			return 2;
+		}
+	
+	}
+}
+
+	
+var tweet_listener = function(){
+twit.stream('statuses/filter', { 'follow' : '2236980362'},
 	  function(stream) {
 	  	stream.on('data', function (data) {
      if(data){
@@ -90,18 +89,16 @@ console.log("made it to sentiment");
 				}
 			)
 	  })
-} //)
+}();
 
-onReady()
 
-// REST api
 
 var app = express();
 app.get('/happy_score.txt', function(req, res) {  
-  console.log("Got request /happy_score.txt: " + tweetScore);
-  res.send("" + tweetScore); // needs to be string for some reason?
+  console.log("Got request /happy_score.txt: " + tweetscore);
+  res.send("" + tweetscore); // needs to be string for some reason?
 });
 
-app.listen(process.env.PORT || 8888);
-//app.listen(3000);
+//app.listen(process.env.PORT || 8888);
+app.listen(3000);
 console.log('Listening on port 3000');
