@@ -34,9 +34,9 @@ for(var i = 0; i < splitWords.length; i++){
 //get sentiment
 var sentiment = function(tweet){
    console.log("made it to sentiment");
+   var score = 0;
 	for(var i = 0; i < tweet.length; i++){
-			var word = tweet[i]
-			,score = 0;
+			var word = tweet[i];
 			if(wordMap[word.toLowerCase()]) {
 				console.log("Word: " + word + " / score: " + wordMap[word.toLowerCase()]);
 				score += parseFloat(wordMap[word.toLowerCase()]);
@@ -49,10 +49,13 @@ var translate_score = function(score){
 
 	if(score < 0){
 	
-	  if(score > 0.5){
+	  if(score > -0.3){
 	    return 5; 
 	  }
-	  else if(score > 1){
+	  else if(score > -0.5){
+		return 7;
+		}
+	  else if(score > -1){
 		return 6;
 	  
 	  }
@@ -61,13 +64,20 @@ var translate_score = function(score){
 	  }
 	}
 	else{
-		if(score < 0.5){
+		if(score < 0.25){
 		  
 		  return 3; 
 		}
-		else if(score < -1){
+		else if(score < 0.75){
 		  return 1;
 		}
+		
+		
+		else if(score == 0){
+		   return 0;
+		}
+		else if(score < 1.25){
+			return 8;}
 		else{
 			
 			return 2;
@@ -92,8 +102,17 @@ twit.stream('statuses/filter', { 'follow' : '2236980362'},
 }();
 
 
+var allowCrossDomain = function(req, res, next) {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+    res.header('Access-Control-Allow-Headers', 'Content-Type');
 
+    next();
+}
 var app = express();
+app.configure(function() {
+    app.use(allowCrossDomain);
+});
 app.get('/happy_score.txt', function(req, res) {  
   console.log("Got request /happy_score.txt: " + tweetscore);
   res.send("" + tweetscore); // needs to be string for some reason?
